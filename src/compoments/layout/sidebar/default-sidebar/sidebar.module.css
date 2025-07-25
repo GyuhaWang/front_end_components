@@ -1,88 +1,135 @@
 /** sidebar */
+:root {
+  --sidebar-default-bg: lightgray;
+  --sidebar-close-bg: white;
+  --sidebar-padding-x: 10px;
+  --sidebar-padding-y: 20px;
+  box-sizing: border-box;
+}
 .section {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 20px;
   height: 100vh;
-  overflow-y: scroll;
-  background-color: var(--sidebar-bg, gray);
-  color: white;
-  transition: width 0.3s ease;
-  overflow: hidden;
+
+ 
 }
 
 .close {
   width: 0px;
-  text-wrap: nowrap;
-  background-color: transparent;
-  padding: 0;
   display: hidden;
 }
 
 .open {
-  width: 300px;
+  width:  var(--sidebar-width);
 }
-/** header*/
-.header {
-  height: 42px;
+
+.flex_box{
+  height: 100%;
+  transition: width 0.3s ease;
+  overflow: hidden;
 }
-.header[data-state="close"] {
+/** content container */
+.content_container {
+  box-sizing: border-box;
   position: absolute;
-  top: calc(20px);
-  left: 20px;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  background-color: var(--sidebar-default-bg);
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  transition: height 0.2s ease, top 0.1s ease, transform 0.1s ease, width 0.2s ease, background-color 0.1s ease;
+  overflow-x: hidden;
+  z-index: 20;
+}
+
+.content_container[data-state="close"] {
+  height: calc(100svh - (var(--header-height)*2));
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 0 10 10px 0;
+ background-color: var(--sidebar-close-bg);
+ border-top : solid 1px lightgray;
+ border-right : solid 1px lightgray;
+ border-bottom : solid 1px lightgray;
+ box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+.content_container[data-state="close"][data-header-hovered="false"]{
+  width: 0.1px;
+}
+/** absolute header */
+.absolute_header {
+  position: absolute;
+  padding: 10px;
+  top: 0;
+  left: 0;
   width: 100px;
-  height: fit-content;
+  height: 10svh;
+  z-index: 10;
 }
 /** toggle button */
 .toggle_button {
   margin: 0;
   padding: 5px 10px;
-  background-color: transparent;
   border-radius: 4px;
+  background-color: transparent;
   color: black;
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 16px;
+  letter-spacing: 0;
+  font-weight: 500;
   border: none;
-  width: fit-content;
+  height: 40px;
+  width: 40px;
+  transition: all 0.3s ease;
+
+}
+.toggle_button[data-header-hovered="false"]::before {
+  content: "☰";
+}
+.toggle_button:hover::before,
+.toggle_button[data-header-hovered="true"]::before{
+  content: ">>";
+}
+
+/** header*/
+.header {
+  padding:20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 42px;
+  width: var(--sidebar-width);
+}
+.header[data-state="close"] >.close_button{
+ display: none;
+}
+
+/** close button */
+.close_button {
+  margin: 0;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background-color: transparent;
+  color: black;
+  font-size: 16px;
+  letter-spacing: 0;
+  font-weight: 500;
+  border: none;
+  height: 40px;
+  width: 40px;
   transition: all 0.3s ease;
 }
 
-.toggle_button:hover {
-  scale: 0.95;
-  background-color: lightgray;
-  cursor: pointer;
+.close_button::before {
+  content: "<<";
 }
-.toggle_button:active {
-  scale: 0.9;
-  background-color: lightgray;
-  cursor: pointer;
-}
+
 /** body*/
 .body {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  padding: var(--sidebar-padding-y) var(--sidebar-padding-x);
+  gap: 18px;
   overflow-x: hidden;
-}
-.body[data-state="close"] {
-  position: absolute;
-  padding: 20px;
-  top: calc(20px + 12px + 42px);
-  height: 40%;
-  width: 0px;
-  background-color: red;
-  transition: all 0.3s ease;
-}
-
-.body[data-state="close"][data-header-hovered="true"],
-.body[data-state="close"][data-header-hovered="false"]:hover {
-  width: 200px;
-  padding: 20px;
-}
-.body[data-state="close"][data-header-hovered="false"] {
-  width: 0px;
-  padding: 0px;
 }
 
 /** title */
@@ -96,16 +143,7 @@
 .items {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 12px;
   padding-left: 4px;
 }
 
-.item {
-  text-wrap: nowrap;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.item:hover {
-  scale: 0.95;
-}

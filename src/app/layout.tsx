@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
+import { SidebarProvider } from "../compoments/layout/sidebar/context/SidebarContext";
 
 export const metadata: Metadata = {
   title: "FrontEnd",
@@ -14,7 +15,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        <SidebarProvider>
+          {children}
+        </SidebarProvider>
+      </body>
     </html>
   );
 }

@@ -1,0 +1,40 @@
+:root{
+    --item-width:400px;
+}
+/* scroll view*/
+.scroll_section {
+    position: relative;
+    height: 100px;
+    display: flex;
+    width: 100%;
+    background-color: red;
+    justify-content: space-between;
+    overflow: hidden;
+   
+}
+
+/* contents box*/
+.contents{
+    position:absolute;
+    width: 100%;
+    display: flex;
+    overflow-x: clip;
+    overflow-y: hidden;
+
+}
+
+/* item style*/
+.item{
+    text-wrap: nowrap;
+    width: var(--item-width);
+    min-width: var(--item-width);
+}
+
+/*button*/
+.button{
+display: flex;
+align-items: center;
+justify-content: center;
+width: 100px;
+}
+

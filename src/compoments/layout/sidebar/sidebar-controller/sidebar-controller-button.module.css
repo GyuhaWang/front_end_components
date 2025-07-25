@@ -1,0 +1,37 @@
+/**  sidebar container */
+.header_sidebar_container {
+    width: var(--minimun-header-togglebutton-width);
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    justify-content: start;
+  }
+  .header_sidebar_container[data-state="open"] {
+    display: none;
+  }
+
+  
+/** toggle button */
+.toggle_button {
+  margin: 0;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background-color: transparent;
+  color: black;
+  font-size: 16px;
+  letter-spacing: 0;
+  font-weight: 500;
+  border: none;
+  height: 40px;
+  width: 40px;
+  transition: all 0.3s ease;
+}
+
+.toggle_button[data-header-hovered="false"]::before {
+  content: "☰";
+}
+.toggle_button:hover::before,
+.toggle_button[data-header-hovered="true"]::before{
+  content: ">>";
+}
+
