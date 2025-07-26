@@ -1,53 +1,117 @@
-"use client"
+"use client";
 
-import { ReactElement, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ScrollViewProps } from "../props";
 import styles from "./scroll-view.module.css";
-export default function BlurScrollView(props: ScrollViewProps){
-    const itemWidth = 100;
-    const minDisplayNum =4;
-    const scrollRef = useRef<HTMLDivElement>(null);
-    const [scrollIndex,setScrollIndex] = useState(0);
+export default function BlurScrollView(props: ScrollViewProps) {
+  const itemWidth = 124;
+  const scrollSize = useRef<number>(1);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-    useEffect(()=>{
-    // 시작할 때 왼쪽 요소를 button 크기만큼 이동시켜야함
+  const [scrollState, setScrollState] = useState<"left" | "right" | "middle">(
+    "left"
+  );
 
-    },[])
-    const handleClickPrev =()=>{
-        if (scrollRef.current) {
-            
-            scrollRef.current.scrollTo({
-                left:scrollRef.current.scrollLeft-(itemWidth*minDisplayNum),
-                behavior:"smooth"
-            });
-        // 왼쪽으로 400px 이동
-        }
+  /*scroll section 의 크기 변경에 따른  scrollSize 대응*/
+  useEffect(() => {
+    if (!scrollRef.current) return;
+
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        scrollSize.current = Math.max(
+          1,
+          Math.min(Math.floor(entry.contentRect.width / itemWidth), 4)
+        );
+      }
+    });
+    observer.observe(scrollRef.current);
+
+    let lastState: "left" | "right" | "middle" = scrollState;
+
+    const handleScroll = () => {
+      const el = scrollRef.current;
+      if (!el) return;
+
+      let newState: "left" | "right" | "middle";
+      if (Math.abs(el.scrollLeft + el.clientWidth - el.scrollWidth) < 1) {
+        newState = "right";
+      } else if (el.scrollLeft === 0) {
+        newState = "left";
+      } else {
+        newState = "middle";
+      }
+
+      if (lastState !== newState) {
+        setScrollState(newState);
+        lastState = newState;
+      }
     };
-    const handleClickNext =()=>{
-        if (scrollRef.current) {
-            
-            scrollRef.current.scrollTo({
-                left:scrollRef.current.scrollLeft+(itemWidth*minDisplayNum),
-                behavior:"smooth"
-            });
-        // 왼쪽으로 400px 이동
-        }
+
+    scrollRef.current.addEventListener("scroll", handleScroll);
+
+    return () => {
+      observer.disconnect();
+      scrollRef.current?.removeEventListener("scroll", handleScroll);
     };
-    return(
-        <section className={styles.scroll_section}>
-            
-            {
-            scrollIndex ==0 ?<div></div>:
-            <button className={`${styles.button}`} onClick={handleClickPrev}>prev</button>}
-            <div ref={scrollRef}  className={styles.contents}>
-                {props.items.map((item,index)=><div key={`${item.id} + ${index}`} 
-                className={`${styles.item}`}
-                style={{width:itemWidth}}
-                >{item.displayName}</div>)}
-             
-            </div>
-            {scrollIndex != props.items.length-1 &&
-            <button  className={`${styles.button} `} onClick={handleClickNext}>next</button>}
-        </section>
-    );
+  }, []);
+
+  const handleClickPrev = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({
+        left: scrollRef.current.scrollLeft - itemWidth * scrollSize.current,
+        behavior: "smooth",
+      });
+      // 왼쪽으로 400px 이동
+    }
+  };
+  const handleClickNext = () => {
+    if (scrollRef.current) {
+      console.log("prev", scrollRef.current.scrollLeft);
+      scrollRef.current.scrollTo({
+        left: scrollRef.current.scrollLeft + itemWidth * scrollSize.current,
+        behavior: "smooth",
+      });
+
+      // 오른쪽으로 400px 이동
+    }
+  };
+  return (
+    <section className={styles.scroll_section} style={{ height: "124px" }}>
+      {scrollState === "left" ? (
+        <div></div>
+      ) : (
+        <button
+          className={`${styles.button} ${styles.left}`}
+          onClick={handleClickPrev}
+        ></button>
+      )}
+      <div
+        className={`${
+          scrollState == "right"
+            ? styles.blur_left
+            : scrollState == "left"
+            ? styles.blur_right
+            : styles.blur
+        }`}
+      >
+        <div ref={scrollRef} className={styles.contents}>
+          {props.items.map((item, index) => (
+            <button
+              key={`${item.id} + ${index}`}
+              className={`${styles.item}`}
+              style={{ width: itemWidth, minWidth: itemWidth }}
+            >
+              {item.displayName}
+            </button>
+          ))}
+        </div>
+      </div>
+      {scrollState !== "right" && (
+        <button
+          className={`${styles.button} ${styles.right}`}
+          onClick={handleClickNext}
+        ></button>
+      )}
+    </section>
+  );
 }

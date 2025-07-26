@@ -12,7 +12,7 @@ export default function Home() {
     { id: 2, displayName: "this is third" },
   ];
 
-  const scrollItems : ScrollViewPItem[] =[
+  const scrollItems: ScrollViewPItem[] = [
     { id: 0, displayName: "this is first" },
     { id: 1, displayName: "this is second" },
     { id: 2, displayName: "this is third" },
@@ -22,15 +22,15 @@ export default function Home() {
     { id: 5, displayName: "this is 7" },
     { id: 6, displayName: "this is 8" },
     { id: 7, displayName: "this is 9" },
-  ]
+  ];
   return (
     <div className={styles.page}>
-      
       <SideBar title="this is title" items={items} />
-     
       <main className={styles.main}>
-      <Header/>
-      <BlurScrollView items={scrollItems} min_display_num={3}/>
+        <Header />
+        <div className={styles.body}>
+          <BlurScrollView items={scrollItems} min_display_num={3} />
+        </div>
       </main>
     </div>
   );

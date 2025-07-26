@@ -1,40 +1,123 @@
-:root{
-    --item-width:400px;
+:root {
+  box-sizing: border-box;
 }
 /* scroll view*/
 .scroll_section {
-    position: relative;
-    height: 100px;
-    display: flex;
-    width: 100%;
-    background-color: red;
-    justify-content: space-between;
-    overflow: hidden;
-   
+  position: relative;
+
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  overflow: hidden;
 }
 
 /* contents box*/
-.contents{
-    position:absolute;
-    width: 100%;
-    display: flex;
-    overflow-x: clip;
-    overflow-y: hidden;
-
+.contents {
+  position: absolute;
+  padding: 10px;
+  z-index: 20;
+  display: flex;
+  gap: 16px;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  overflow-x: clip;
+  overflow-y: hidden;
 }
 
 /* item style*/
-.item{
-    text-wrap: nowrap;
-    width: var(--item-width);
-    min-width: var(--item-width);
+.item {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  border-radius: 12px;
+  border: solid 1px rgba(240, 240, 240, 1);
+  cursor: pointer;
+  background: linear-gradient(
+    to bottom,
+    rgba(248, 248, 247, 1) 0%,
+    rgba(248, 248, 247, 1) 40%,
+    white 40%,
+    white 100%
+  );
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 12px 32px,
+    rgba(0, 0, 0, 0.0086) 0px 0px 0px 1px;
+  transition: all 0.1s ease-in-out;
 }
-
+.item:hover {
+  scale: 1.1;
+  border: solid 1px rgba(240, 240, 240, 1);
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 12px 32px,
+    rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+}
+.item:active {
+  scale: 1;
+}
+/* blur */
+.blur {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0px,
+    black 48px,
+    black calc(100% - 48px),
+    transparent 100%
+  );
+}
+.blur_left {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+  mask-image: linear-gradient(to right, transparent 0px, black 48px);
+}
+.blur_right {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+  mask-image: linear-gradient(
+    to right,
+    black calc(100% - 48px),
+    transparent 100%
+  );
+}
 /*button*/
-.button{
-display: flex;
-align-items: center;
-justify-content: center;
-width: 100px;
+.button {
+  display: none;
+  position: absolute;
+  background-color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  border: solid lightgray 1px;
+  z-index: 20;
+  top: 50%;
+  transform: translate(-0%, -50%);
+  cursor: pointer;
+}
+.left {
+  left: 0;
+}
+.left:after {
+  content: "<";
 }
 
+.right {
+  right: 0;
+}
+.right:after {
+  content: ">";
+}
+
+/* contents에 hover 시 버튼 보임 */
+.scroll_section:hover .button,
+.button:hover {
+  display: inline;
+}
