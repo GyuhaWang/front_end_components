@@ -6,12 +6,6 @@ import BlurScrollView from "@/compoments/layout/scroll-view/blurred-scroll-view/
 import { ScrollViewPItem } from "@/compoments/layout/scroll-view/props";
 
 export default function Home() {
-  const items: SideBarItem[] = [
-    { id: 0, displayName: "this is first" },
-    { id: 1, displayName: "this is second" },
-    { id: 2, displayName: "this is third" },
-  ];
-
   const scrollItems: ScrollViewPItem[] = [
     { id: 0, displayName: "this is first" },
     { id: 1, displayName: "this is second" },
@@ -24,14 +18,8 @@ export default function Home() {
     { id: 7, displayName: "this is 9" },
   ];
   return (
-    <div className={styles.page}>
-      <SideBar title="this is title" items={items} />
-      <main className={styles.main}>
-        <Header />
-        <div className={styles.body}>
-          <BlurScrollView items={scrollItems} min_display_num={3} />
-        </div>
-      </main>
+    <div className={styles.body}>
+      <BlurScrollView items={scrollItems} min_display_num={3} />
     </div>
   );
 }
