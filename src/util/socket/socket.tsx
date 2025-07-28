@@ -1,20 +1,36 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export default function ScoketPage() {
+export default function SocketPage() {
+  const socketRef = useRef<WebSocket | null>(null);
+  const [messages, setMessages] = useState<string[]>([]);
+
   useEffect(() => {
-    const socket = new WebSocket("ws://localhost:8080");
-    const handleOpen = (event: Event) => {
+    const socket = new WebSocket("ws://localhost:8081");
+    socketRef.current = socket;
+
+    const handleOpen = () => {
       console.debug("socket opened");
       socket.send("Hello Server!");
     };
-    const handleMessage = (event: MessageEvent<unknown>) => {
-      console.log("Message from server ", event.data);
+
+    const handleMessage = async (event: MessageEvent) => {
+      let dataStr = "";
+      if (typeof event.data === "string") {
+        dataStr = event.data;
+      } else if (event.data instanceof Blob) {
+        dataStr = await event.data.text();
+      } else {
+        dataStr = String(event.data);
+      }
+      setMessages((prev) => [...prev, dataStr]);
+      console.log("Message from server:", dataStr);
     };
 
     socket.addEventListener("open", handleOpen);
     socket.addEventListener("message", handleMessage);
+
     return () => {
       console.debug("page left");
       socket.removeEventListener("open", handleOpen);
@@ -23,9 +39,27 @@ export default function ScoketPage() {
     };
   }, []);
 
+  const handleSubmitForm = (formData: FormData) => {
+    const message = formData.get("message") ?? "empty";
+    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+      socketRef.current.send(message);
+    }
+  };
+
   return (
     <div>
-      <input placeholder="socket 전송"></input>
+      <form action={handleSubmitForm}>
+        <input placeholder="socket 전송" name="message" />
+        <input type="submit" value="send" />
+      </form>
+      <div>
+        <h3>받은 메시지</h3>
+        <ul>
+          {messages.map((msg, idx) => (
+            <li key={idx}>{msg}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
