@@ -2,7 +2,7 @@
 import styles from "./sidebar.module.css";
 import commonStyles from "@/app/page.module.css";
 import { SideBarProps } from "../props";
-import { useSidebarContext } from "../context/SidebarContext";
+import { useSidebarContext } from "../../../../providers/SidebarContext";
 import Link from "next/link";
 
 export default function SideBar(props: SideBarProps) {
@@ -56,7 +56,7 @@ export default function SideBar(props: SideBarProps) {
             <div className={styles.items}>
               {props.items.map((item, index) => (
                 <Link
-                  href={String(item.id)}
+                  href={`/main/${String(item.id)}`}
                   className={commonStyles.hover_item}
                   key={(item.id as string) + index}
                 >

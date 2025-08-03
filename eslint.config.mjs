@@ -18,7 +18,7 @@ const eslintConfig = [
         {
           selector: "interface",
           format: ["PascalCase"],
-          suffix: ["Props", "Item"],
+          suffix: ["Props", "Item", "Type"],
         },
       ],
     },
