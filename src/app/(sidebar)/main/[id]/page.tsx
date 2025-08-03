@@ -1,5 +1,3 @@
-import ScoketPage from "@/util/socket/socket";
-
 export default async function Page({
   params,
 }: {
@@ -13,8 +11,15 @@ export default async function Page({
   // 한 번에 몇명을 socket으로 받을 수 있을까?
   return (
     <div>
-      hello {param.id}
-      <ScoketPage />
+      <Title prop={param.id} />
+    </div>
+  );
+}
+
+function Title({ prop }: { prop: string }) {
+  return (
+    <div>
+      <input defaultValue={prop}></input>
     </div>
   );
 }
